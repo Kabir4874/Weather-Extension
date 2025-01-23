@@ -4,11 +4,6 @@ import { fetchOpenWeatherData } from "../utils/api";
 import "./popup.css";
 
 const App: React.FC<{}> = () => {
-  useEffect(() => {
-    fetchOpenWeatherData("Toronto")
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
-  }, []);
   return (
     <div>
       <img src="icon.png" />
