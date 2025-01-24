@@ -8,6 +8,7 @@ import {
   getStoredOptions,
   LocalStorageOptions,
   setStoredCities,
+  setStoredOptions,
 } from "../utils/storage";
 import "./popup.css";
 import WeatherCard from "./weatherCard";
@@ -40,12 +41,22 @@ const App: React.FC<{}> = () => {
     });
   };
 
+  const handleTempScaleButtonClick = () => {
+    const updateOptions: LocalStorageOptions = {
+      ...options,
+      tempScale: options.tempScale === "metric" ? "imperial" : "metric",
+    };
+    setStoredOptions(updateOptions).then(() => {
+      setOptions(updateOptions);
+    });
+  };
+
   if (!options) {
     return null;
   }
   return (
     <Box mx={"8px"} my={"16px"}>
-      <Grid container>
+      <Grid container justify="space-evenly">
         <Grid item>
           <Paper>
             <Box px={"15px"} py={"5px"}>
@@ -61,13 +72,20 @@ const App: React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item>
-
+          <Paper>
+            <Box py={"4px"}>
+              <IconButton onClick={handleTempScaleButtonClick}>
+                {options.tempScale === "metric" ? "\u2103" : "\u2109"}
+              </IconButton>
+            </Box>
+          </Paper>
         </Grid>
       </Grid>
       {cities?.map((city, index) => (
         <WeatherCard
           city={city}
           key={index}
+          tempScale={options.tempScale}
           onDelete={() => handleCityDeleteButtonClick(index)}
         />
       ))}
