@@ -1,3 +1,5 @@
+import { Box, Grid, IconButton, InputBase, Paper } from "@material-ui/core";
+import { Add as AddIcon } from "@material-ui/icons";
 import "fontsource-roboto";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
@@ -9,12 +11,37 @@ const App: React.FC<{}> = () => {
     "New York",
     "Error",
   ]);
+  const [cityInput, setCityInput] = useState<string>("");
+  const handleCityButtonClick = () => {
+    if (cityInput === "") {
+      return;
+    }
+    setCities([...cities, cityInput]);
+    setCityInput("");
+  };
   return (
-    <div>
+    <Box mx={"8px"} my={"16px"}>
+      <Grid container>
+        <Grid item>
+          <Paper>
+            <Box px={"15px"} py={"5px"}>
+              <InputBase
+                placeholder="Add a city name"
+                value={cityInput}
+                onChange={(e) => setCityInput(e.target.value)}
+              />
+              <IconButton onClick={handleCityButtonClick}>
+                <AddIcon />
+              </IconButton>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
       {cities.map((city, index) => (
         <WeatherCard city={city} key={index} />
       ))}
-    </div>
+      <Box height={"16px"} />
+    </Box>
   );
 };
 
