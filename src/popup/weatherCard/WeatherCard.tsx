@@ -25,10 +25,18 @@ const WeatherCard: React.FC<{ city: string }> = ({ city }) => {
         setWeatherData(data);
         setCardState("ready");
       })
-      .catch((err) => setCardState('error'));
+      .catch((err) => setCardState("error"));
   }, [city]);
-  if (!weatherData) {
-    return <WeatherCardContainer>Loading...</WeatherCardContainer>;
+  if (cardState === "loading" || cardState === "error") {
+    return (
+      <WeatherCardContainer>
+        <Typography variant="body1">
+          {cardState === "loading"
+            ? "Loading..."
+            : "Error: could not retrieve weather data for this city."}
+        </Typography>
+      </WeatherCardContainer>
+    );
   }
   return (
     <WeatherCardContainer>
