@@ -3,7 +3,7 @@ import { Add as AddIcon } from "@material-ui/icons";
 import "fontsource-roboto";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { getStoredCities } from "../utils/storage";
+import { getStoredCities, setStoredCities } from "../utils/storage";
 import "./popup.css";
 import WeatherCard from "./weatherCard";
 const App: React.FC<{}> = () => {
@@ -18,13 +18,19 @@ const App: React.FC<{}> = () => {
     if (cityInput === "") {
       return;
     }
-    setCities([...cities, cityInput]);
-    setCityInput("");
+    const updatedCities = [...cities, cityInput];
+    setStoredCities(updatedCities).then(() => {
+      setCities([...cities, cityInput]);
+      setCityInput("");
+    });
   };
 
   const handleCityDeleteButtonClick = (index: number) => {
     cities.splice(index, 1);
-    setCities([...cities]);
+    const updatedCities = [...cities];
+    setStoredCities(updatedCities).then(() => {
+      setCities(updatedCities);
+    });
   };
   return (
     <Box mx={"8px"} my={"16px"}>
