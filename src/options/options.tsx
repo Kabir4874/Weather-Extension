@@ -16,8 +16,10 @@ import {
   setStoredOptions,
 } from "../utils/storage";
 import "./options.css";
+type FormState = "ready" | "saving";
 const App: React.FC<{}> = () => {
   const [options, setOptions] = useState<LocalStorageOptions | null>(null);
+  const [formState, setFormState] = useState<FormState>("ready");
   useEffect(() => {
     getStoredOptions().then((options) => setOptions(options));
   }, []);
@@ -27,12 +29,17 @@ const App: React.FC<{}> = () => {
   };
 
   const handleSaveButtonClick = () => {
-    setStoredOptions(options);
+    setFormState("saving");
+    setStoredOptions(options).then(() => {
+      setFormState("ready");
+    });
   };
 
   if (!options) {
     return null;
   }
+
+  const isFieldsDisabled = formState === "saving";
   return (
     <Box mx={"10%"} my={"2%"}>
       <Card>
@@ -48,6 +55,7 @@ const App: React.FC<{}> = () => {
                 placeholder="Enter a home city name"
                 value={options.homeCity}
                 onChange={(e) => handleHomeCityChange(e.target.value)}
+                disabled={isFieldsDisabled}
               />
             </Grid>
             <Grid item>
@@ -55,8 +63,9 @@ const App: React.FC<{}> = () => {
                 variant="contained"
                 color="primary"
                 onClick={handleSaveButtonClick}
+                disabled={isFieldsDisabled}
               >
-                Save
+                {formState === "ready" ? "Save" : "Saving..."}
               </Button>
             </Grid>
           </Grid>
