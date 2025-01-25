@@ -11,7 +11,7 @@ import {
   setStoredOptions,
 } from "../utils/storage";
 import "./popup.css";
-import WeatherCard from "./weatherCard";
+import WeatherCard from "../components/weatherCard";
 const App: React.FC<{}> = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [cityInput, setCityInput] = useState<string>("");
