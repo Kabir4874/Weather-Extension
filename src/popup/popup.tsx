@@ -16,6 +16,7 @@ import {
   setStoredOptions,
 } from "../utils/storage";
 import "./popup.css";
+
 const App: React.FC<{}> = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [cityInput, setCityInput] = useState<string>("");
@@ -32,7 +33,7 @@ const App: React.FC<{}> = () => {
     }
     const updatedCities = [...cities, cityInput];
     setStoredCities(updatedCities).then(() => {
-      setCities([...cities, cityInput]);
+      setCities(updatedCities);
       setCityInput("");
     });
   };
@@ -59,6 +60,7 @@ const App: React.FC<{}> = () => {
     chrome.tabs.query(
       {
         active: true,
+        currentWindow: true,
       },
       (tabs) => {
         if (tabs.length > 0) {
@@ -71,16 +73,17 @@ const App: React.FC<{}> = () => {
   if (!options) {
     return null;
   }
+
   return (
-    <Box mx={"8px"} my={"16px"}>
+    <Box mx="8px" my="16px">
       <Grid container justify="space-evenly">
         <Grid item>
           <Paper>
-            <Box px={"15px"} py={"5px"}>
+            <Box px="15px" py="5px">
               <InputBase
                 placeholder="Add a city name"
                 value={cityInput}
-                onChange={(e) => setCityInput(e.target.value)}
+                onChange={(event) => setCityInput(event.target.value)}
               />
               <IconButton onClick={handleCityButtonClick}>
                 <AddIcon />
@@ -90,7 +93,7 @@ const App: React.FC<{}> = () => {
         </Grid>
         <Grid item>
           <Paper>
-            <Box py={"4px"}>
+            <Box py="4px">
               <IconButton onClick={handleTempScaleButtonClick}>
                 {options.tempScale === "metric" ? "\u2103" : "\u2109"}
               </IconButton>
@@ -99,7 +102,7 @@ const App: React.FC<{}> = () => {
         </Grid>
         <Grid item>
           <Paper>
-            <Box py={"4px"}>
+            <Box py="4px">
               <IconButton onClick={handleOverlayButtonClick}>
                 <PictureInPictureIcon />
               </IconButton>
@@ -107,18 +110,18 @@ const App: React.FC<{}> = () => {
           </Paper>
         </Grid>
       </Grid>
-      {options.homeCity !== "" && (
+      {options.homeCity != "" && (
         <WeatherCard city={options.homeCity} tempScale={options.tempScale} />
       )}
-      {cities?.map((city, index) => (
+      {cities.map((city, index) => (
         <WeatherCard
           city={city}
-          key={index}
           tempScale={options.tempScale}
+          key={index}
           onDelete={() => handleCityDeleteButtonClick(index)}
         />
       ))}
-      <Box height={"16px"} />
+      <Box height="16px" />
     </Box>
   );
 };
