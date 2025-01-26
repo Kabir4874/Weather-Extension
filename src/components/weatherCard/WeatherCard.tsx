@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -7,21 +6,22 @@ import {
   CardContent,
   Grid,
   Typography,
-} from '@material-ui/core'
+} from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import {
-  getWeatherIconSrc,
   fetchOpenWeatherData,
+  getWeatherIconSrc,
   OpenWeatherData,
   OpenWeatherTempScale,
-} from '../../utils/api'
-import './WeatherCard.css'
+} from "../../utils/api";
+import "./WeatherCard.css";
 
 const WeatherCardContainer: React.FC<{
-  children: React.ReactNode
-  onDelete?: () => void
+  children: React.ReactNode;
+  onDelete?: () => void;
 }> = ({ children, onDelete }) => {
   return (
-    <Box mx={'4px'} my={'16px'}>
+    <Box mx={"4px"} my={"16px"}>
       <Card>
         <CardContent>{children}</CardContent>
         <CardActions>
@@ -33,39 +33,39 @@ const WeatherCardContainer: React.FC<{
         </CardActions>
       </Card>
     </Box>
-  )
-}
+  );
+};
 
-type WeatherCardState = 'loading' | 'error' | 'ready'
+type WeatherCardState = "loading" | "error" | "ready";
 
 const WeatherCard: React.FC<{
-  city: string
-  tempScale: OpenWeatherTempScale
-  onDelete?: () => void
+  city: string;
+  tempScale: OpenWeatherTempScale;
+  onDelete?: () => void;
 }> = ({ city, tempScale, onDelete }) => {
-  const [weatherData, setWeatherData] = useState<OpenWeatherData | null>(null)
-  const [cardState, setCardState] = useState<WeatherCardState>('loading')
+  const [weatherData, setWeatherData] = useState<OpenWeatherData | null>(null);
+  const [cardState, setCardState] = useState<WeatherCardState>("loading");
 
   useEffect(() => {
     fetchOpenWeatherData(city, tempScale)
       .then((data) => {
-        setWeatherData(data)
-        setCardState('ready')
+        setWeatherData(data);
+        setCardState("ready");
       })
-      .catch((err) => setCardState('error'))
-  }, [city, tempScale])
+      .catch((err) => setCardState("error"));
+  }, [city, tempScale]);
 
-  if (cardState == 'loading' || cardState == 'error') {
+  if (cardState == "loading" || cardState == "error") {
     return (
       <WeatherCardContainer onDelete={onDelete}>
         <Typography className="weatherCard-title">{city}</Typography>
         <Typography className="weatherCard-body">
-          {cardState == 'loading'
-            ? 'Loading...'
-            : 'Error: could not retrieve weather data for this city.'}
+          {cardState == "loading"
+            ? "Loading..."
+            : "Error: could not retrieve weather data for this city."}
         </Typography>
       </WeatherCardContainer>
-    )
+    );
   }
 
   return (
@@ -94,7 +94,7 @@ const WeatherCard: React.FC<{
         </Grid>
       </Grid>
     </WeatherCardContainer>
-  )
-}
+  );
+};
 
-export default WeatherCard
+export default WeatherCard;
